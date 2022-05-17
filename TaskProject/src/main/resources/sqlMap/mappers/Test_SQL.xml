@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+
+
+<mapper namespace="com.example.demo.mapper.TestMapper">
+	<select id="selectList" parameterType="EmpVO" resultType="HashMap">
+		        SELECT   
+   				   * 
+			      FROM   
+			     emp10 
+			      ORDER BY empno asc
+	</select>
+	
+	<select id="selectListAll" parameterType="MemberVO" resultType="HashMap">
+		        	SELECT  A.userid , B.username,  B.title, B.content , B.insert_date
+						FROM  MP_MEMBER A
+						LEFT JOIN MEMBER_BOARD B
+						ON  A.userid = B.userid
+					   WHERE b.title IS NOT NULL and b.userid =#{userid}
+	</select>
+	
+	
+   <select id="selectSearch" parameterType="BoardVO" resultType="HashMap">
+   
+   	                 SELECT  *
+						FROM MEMBER_BOARD
+					
+					 <if test='searchKeyword != " "'>
+					
+					WHERE title LIKE '%' || #{title} || '%'
+					
+					</if>
+					 AND title is not null
+
+	</select>
+	
+	
+	
+	
+	
+	<!--VO에는 name 이라고 되어있어서 찾을때는 {name} 이라고 해야한다!!! -->
+	<select id="selectDetail" parameterType="BoardVO" resultType="HashMap">
+		      	SELECT  A.userid , A.username,  B.title, B.content , B.insert_date
+						FROM  MP_MEMBER A
+						LEFT JOIN MEMBER_BOARD B
+						ON  A.userid = B.userid
+					   WHERE title = #{title}
+					   
+		      
+		      
+	</select>
+	
+
+   	<delete id="deleteTest" parameterType="BoardVO">
+   	
+   	  delete from MEMBER_BOARD where title = #{title}
+   	  
+   	  </delete>
+ 
+    <!-- 게시글작성  INSERT INTO emp10 ( ename , content  ) VALUES ( #{ename} , #{content})-->
+	<insert id="insertTest" parameterType="BoardVO">
+	     /*insertTest*/
+	 	
+	 	  	  INSERT INTO MEMBER_BOARD ( userid , username,  title, content   ) VALUES ( #{userid} ,#{username} , #{title}, #{content}) 
+	</insert>
+	
+	
+	<!--회원가입 -->
+	<insert id="insertRegister" parameterType="MemberVO">
+	     /*insertTest*/
+	 	 INSERT INTO MP_MEMBER ( userid ,userpass , username ,loginlevel ) VALUES ( #{userid} , #{userpass} , #{username} , '2') 
+	</insert>
+	
+	<!--로그인 -->
+	
+		<select id="testlogin" parameterType="MemberVO" resultType="HashMap">
+		 
+		  select userid , userpass , username , join_date , loginlevel  FROM MP_MEMBER
+		  WHERE   userid = #{userid} and userpass = #{userpass} 
+		 <if test="userid == 'admin'">
+		    and loginlevel = '1'
+           </if>	
+          <if test="userid != 'admin'">       
+		      and loginlevel = '2'
+		    </if>  
+	</select>
+	
+	
+	
+	
+		<select id="testadmin" parameterType="MemberVO" resultType="HashMap">
+		    
+		 	
+				    SELECT  a.userid, a.loginlevel, b.USERNAME,  B.TITLE, B.CONTENT , B.INSERT_DATE
+					 FROM  MP_MEMBER A
+					 LEFT JOIN MEMBER_BOARD B
+					 ON  A.USERID = B.USERID 
+				     WHERE b.title IS NOT NULL AND loginlevel  = #{loginlevel}   
+		      
+	</select>
+	
+	
+	<update id="updateTest" parameterType="MemberVO">
+		/* updateTest */
+			      UPDATE MEMBER_BOARD SET title = #{title} ,content = #{content}  WHERE title = #{title} 
+	</update>
+	
+</mapper>

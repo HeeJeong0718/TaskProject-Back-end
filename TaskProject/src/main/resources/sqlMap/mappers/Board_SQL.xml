@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+
+
+<mapper namespace="com.example.demo.mapper.BoardMapper">
+
+		<select id="selectListAll" parameterType="MemberVO" resultType="HashMap">
+		        	SELECT  A.userid , B.username,  B.title, B.content , B.insert_date
+						FROM  MP_MEMBER A
+						LEFT JOIN MEMBER_BOARD B
+						ON  A.userid = B.userid
+					   WHERE b.title IS NOT NULL and b.userid =#{userid}
+	</select>
+ 
+	<insert id="boardInsert" parameterType="BoardVO">
+	     /*insertTest*/
+	 	
+	 	  	  INSERT INTO MEMBER_BOARD ( userid , username,  title, content   ) VALUES ( #{userid} ,#{username} , #{title}, #{content}) 
+	</insert>
+	
+	
+		<update id="boardUpdate" parameterType="MemberVO">
+		/* updateTest */
+			      UPDATE MEMBER_BOARD SET title = #{title} ,content = #{content}  WHERE title = #{title} 
+	</update>
+	
+	
+
+   	<delete id="boardDelete" parameterType="BoardVO">
+   	
+   	  delete from MEMBER_BOARD where title = #{title}
+   	  
+   	  </delete>
+ 
+	 	<!--VO에는 name 이라고 되어있어서 찾을때는 {name} 이라고 해야한다!!! -->
+	<select id="boardDetail" parameterType="BoardVO" resultType="HashMap">
+		      	SELECT  A.userid , A.username,  B.title, B.content , B.insert_date
+						FROM  MP_MEMBER A
+						LEFT JOIN MEMBER_BOARD B
+						ON  A.userid = B.userid
+					   WHERE title = #{title}
+					   
+		      
+		      
+	</select>
+	
+	
+		<select id="adminDetail" parameterType="MemberVO" resultType="HashMap">
+		    
+		 	
+				    SELECT  a.userid, a.loginlevel, b.USERNAME,  B.TITLE, B.CONTENT , B.INSERT_DATE
+					 FROM  MP_MEMBER A
+					 LEFT JOIN MEMBER_BOARD B
+					 ON  A.USERID = B.USERID 
+				     WHERE b.title IS NOT NULL AND loginlevel  = #{loginlevel}   
+		      
+	</select>
+	
+	
+</mapper>
