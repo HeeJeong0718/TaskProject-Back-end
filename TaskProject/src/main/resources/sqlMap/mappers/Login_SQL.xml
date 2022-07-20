@@ -10,12 +10,12 @@
 	
 		<select id="tasklogin" parameterType="MemberVO" resultType="HashMap">
 		 
-		  select userid , userpass , username , join_date , loginlevel  FROM MP_MEMBER
-		  WHERE   userid = #{userid} and userpass = #{userpass} 
-		 <if test="userid == 'admin'">
+		  select mem_id , mem_pwd , mem_nm , insert_date , loginlevel  FROM MEMBER_ACCOUNT
+		  WHERE   mem_id = #{mem_id} and mem_pwd = #{mem_pwd} 
+		 <if test="mem_id == 'admin'">
 		    and loginlevel = '1'
            </if>	
-          <if test="userid != 'admin'">       
+          <if test="mem_id != 'admin'">       
 		      and loginlevel = '2'
 		    </if>  
 	</select>
@@ -23,7 +23,8 @@
 	<!--회원가입 -->
 	<insert id="insertRegister" parameterType="MemberVO">
 	     /*insertTest*/
-	 	 INSERT INTO MP_MEMBER ( userid ,userpass , username ,loginlevel ) VALUES ( #{userid} , #{userpass} , #{username} , '2') 
+	     INSERT INTO MEMBER_ACCOUNT (mem_id , mem_pwd , mem_nm , loginlevel, mem_dp_id , mem_dp_nm  ) VALUES ( #{mem_id} , #{mem_pwd} , #{mem_nm} , '2' , #{mem_dp_id} , #{mem_dp_nm} )
+	 	 
 	</insert>
 	
 	

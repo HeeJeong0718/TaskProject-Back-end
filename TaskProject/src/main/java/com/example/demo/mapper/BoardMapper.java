@@ -29,6 +29,8 @@ public interface BoardMapper {
 	 
 	HashMap<String, Object> boardDetail (BoardVO boardVO)throws Exception, SQLException;
 	
+	List<HashMap<String, Object>>  selectSearch(BoardVO boardVO)throws Exception, SQLException;
+	
 	List<HashMap<String, Object>>  adminDetail(MemberVO memberVO )throws Exception, SQLException;
 	
 }

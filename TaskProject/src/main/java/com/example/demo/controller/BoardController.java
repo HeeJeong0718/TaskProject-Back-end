@@ -144,6 +144,24 @@ public class BoardController {
 			resHeader.add("Content-Type", "application/json;charset=UTF-8");
 			return new ResponseEntity<String>(jsonStr, resHeader, HttpStatus.CREATED);
 		}
+		 
+		 
+			@RequestMapping(value = "/boardSearch")
+			public ResponseEntity<String> mainsearch(ModelMap model,@RequestBody  BoardVO  boardVO , HttpServletRequest request, HttpServletResponse response, HttpSession session) throws Exception {
+				
+				String jsonStr = "";
+				HttpHeaders resHeader = new HttpHeaders();
+				List<HashMap<String,Object>> resultList = boardService.selectSearch(boardVO);
+
+
+				jsonStr = StringUtil.jsonStrSearch(resultList);
+				resHeader.add("Content-Type", "application/json");		
+				return new ResponseEntity<String>(jsonStr,resHeader, HttpStatus.CREATED);
+			}
+			
+		 
+		 
+		 
 		 	
 		 @CrossOrigin(origins="*")
 			@RequestMapping(value = "/adminDetail")

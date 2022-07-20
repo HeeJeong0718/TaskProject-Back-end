@@ -426,7 +426,7 @@ public class StringUtil {
 	
 	
 	/**
-	 * 쿼리 조회 이후 VO에 담긴 데이터를  JSON으로 전환<p>POS 메모리 사용 목적에 따라 바이트 크기 체크<p>하여 가공 처리한 데이터 리턴한다.
+	 * 쿼리 조회 이후 VO에 담긴 데이터를  JSON으로 전환
 	 * @param s
 	 * @return
 	 */

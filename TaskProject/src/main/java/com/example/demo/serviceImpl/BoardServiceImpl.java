@@ -53,6 +53,14 @@ public class BoardServiceImpl implements BoardService {
 		return boardMapper.boardDetail(boardVO);
 	}
 
+
+	@Override
+	public List<HashMap<String, Object>> selectSearch( BoardVO boardVO) throws Exception {
+		return boardMapper.selectSearch(boardVO);
+	}
+	
+	
+	
 	@Override
 	public List<HashMap<String, Object>> adminDetail(MemberVO memberVO) throws Exception {
 		return boardMapper.adminDetail(memberVO);

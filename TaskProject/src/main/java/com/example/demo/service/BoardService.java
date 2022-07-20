@@ -23,6 +23,8 @@ public interface BoardService {
 	
 	HashMap<String, Object> boardDetail( BoardVO  boardVO)throws Exception;
 	
+	public List<HashMap<String,Object>> selectSearch(BoardVO  boardVO) throws Exception;
+	
 	public List<HashMap<String,Object>> adminDetail(MemberVO memberVO) throws Exception;
 	
 }
