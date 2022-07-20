@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+
+
+<mapper namespace="com.example.demo.mapper.AdminMapper">
+
+		<select id="selectDepartMent" parameterType="DepartMentVO" resultType="HashMap">
+		       
+		   select dep_no , dep_id , dep_nm , TO_CHAR(INSERT_date,'YYYY-MM-DD') AS INSERT_DATE , update_date
+		   
+		   from department 
+		   
+	</select>
+ 
+	
+	
+	
+</mapper>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+
+
+<mapper namespace="com.example.demo.mapper.DepartMentMapper">
+
+		<select id="selectListAll" parameterType="DepartMentVO" resultType="HashMap">
+		
+		   select dep_no , dep_id , dep_nm , insert_date , update_date
+		   
+		   from department 
+		   
+		   
+		    
+		
+	
+	</select>
+ 
+	<insert id="depInsert" parameterType="DepartMentVO">
+	     /*insertTest*/
+	 	
+	 	  	  <!--  INSERT INTO MEMBER_BOARD2 ( seq , userid , username,  title, content , due_date  ) VALUES ( #{userid} ,#{username} , #{title}, #{content} ,#{due_date})-->
+	 	  	    INSERT INTO DEPARTMENT (   dep_no , dep_id , dep_nm  )  VALUES ( dep_idx.nextval, #{dep_id} , #{dep_nm})
+	</insert>
+	
+	
+		<update id="depUpdate" parameterType="DepartMentVO">
+		/* updateTest  */
+			      
+			      UPDATE DEPARTMENT SET dep_id = #{dep_id}, dep_nm= #{dep_nm} where dep_no = #{dep_no} 
+			      
+			      
+	</update>
+	
+	
+
+   	<delete id="depDelete" parameterType="BoardVO">
+   	
+   	  delete from DEPARTMENT WHERE dep_no = #{dep_no}
+   	  </delete>
+ 
+	
+	
+
+	
+</mapper>
