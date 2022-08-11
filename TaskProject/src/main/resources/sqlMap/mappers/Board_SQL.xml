@@ -7,22 +7,73 @@
 <mapper namespace="com.example.demo.mapper.BoardMapper">
 
 		<select id="selectListAll" parameterType="MemberVO" resultType="HashMap">
-		        	SELECT 
+		        <!-- 	SELECT 
 						A.MEM_ID , B_NO , B.B_TITLE , B_CONTENT ,TO_CHAR(B.INSERT_date,'YYYY-MM-DD') AS INSERT_DATE , TO_CHAR(B.DUE_DATE,'YYYY-MM-DD') AS DUE_DATE
 						,B.STATUS 
 						FROM  MEMBER_ACCOUNT A
 						LEFT JOIN BOARD_LIST B
 						ON A.MEM_ID = B.B_ID 
 						where A.MEM_ID = #{mem_id} and B.B_TITLE is not null
-						ORDER BY TO_NUMBER(B_NO)
+						ORDER BY TO_NUMBER(B_NO) 
+						SELECT  
+				 c.mem_no, b_row ,b_title , b_id , b_content , mem_id
+				 FROM 
+				 (SELECT ROWNUM AS b_row , mem_no ,b_title , b_id ,b_content FROM board_list WHERE b_id = #{b_id} ) bb , member_account c
+				 WHERE bb.mem_no = c.mem_no AND c.mem_no = #{mem_no}
+				   SELECT 
+					    A.MEM_NO, B.B_ROW , A.MEM_ID , B.B_TITLE, B.B_CONTENT,  B.B_ID ,  B.B_NO , b.status , b.insert_date, b.due_date , b.use_flag
+						FROM  MEMBER_ACCOUNT A
+						LEFT JOIN (SELECT ROWNUM AS b_row , mem_no ,b_title , b_id ,b_content ,b_no , status, TO_CHAR(insertdate,'YYYY-MM-DD') AS INSERT_DATE, TO_CHAR(DUE_DATE,'YYYY-MM-DD') AS DUE_DATE ,USE_FLAG FROM board_list WHERE MEM_NO = '1') B
+						ON A.MEM_ID = B.B_ID 
+						where A.MEM_ID = #{mem_id} and B.B_TITLE is not NULL
+				 
+						 -->
+			
+						 
+			    SELECT  rownum AS b_row,
+					    A.MEM_NO, A.MEM_ID , B.B_TITLE, B.B_CONTENT,  B.B_ID ,  B.B_NO , b.status , b.insert_date, b.due_date , b.use_flag
+						FROM  MEMBER_ACCOUNT A
+						LEFT JOIN (SELECT  mem_no ,b_title , b_id ,b_content ,b_no , status, TO_CHAR(insertdate,'YYYY-MM-DD') AS INSERT_DATE,
+						TO_CHAR(DUE_DATE,'YYYY-MM-DD') AS DUE_DATE ,USE_FLAG FROM board_list WHERE MEM_NO = #{mem_no}  ORDER BY due_date asc) B
+						ON A.MEM_ID = B.B_ID 
+						where A.MEM_ID = #{mem_id} and B.B_TITLE is not NULL
+
+					
+
+
+
+
+			 				
 	
 	</select>
+	
+	
+		<select id="adminNotice" parameterType="MemberVO" resultType="HashMap">
+		      
+		     <!--  SELECT B_NO, B_ID, B_TITLE ,B_CONTENT , TO_CHAR(INSERT_DATE, 'YYYY-MM-DD') AS INSERT_DATE , TO_CHAR(DUE_DATE,'YYYY-MM-DD') AS DUE_DATE  FROM BOARD_LIST WHERE b_id ='admin' -->
+
+	           SELECT * FROM board_list WHERE b_id ='admin' 
+	</select>
+	
+	<update id="NoticeDelete" parameterType="BoardVO">
+   	
+   	  
+   	 	UPDATE BOARD_LIST SET use_flag = 'N' where b_no = '1' AND b_id ='admin'
+ 
+   	  
+   	  </update>
+ 
+	
  
 	<insert id="boardInsert" parameterType="BoardVO">
 	     /*insertTest*/
 	 	
-	 	  	  <!--  INSERT INTO MEMBER_BOARD2 ( seq , userid , username,  title, content , due_date  ) VALUES ( #{userid} ,#{username} , #{title}, #{content} ,#{due_date})-->
-	 	  	    INSERT INTO BOARD_LIST ( b_no, b_id ,  b_title, b_content  ,  due_date , status  ) VALUES ( BOARD_IDX.nextval, #{b_id} , #{b_title}, #{b_content}, #{due_date} , #{status})
+	 	  	  <!--  INSERT INTO MEMBER_BOARD2 ( seq , userid , username,  title, content , due_date  ) VALUES ( #{userid} ,#{username} , #{title}, #{content} ,#{due_date})
+	 	  	    INSERT INTO BOARD_LIST ( b_no, b_id ,  b_title, b_content  ,  due_date , status  ) VALUES ( BOARD_IDX.nextval, #{b_id} , #{b_title}, #{b_content}, #{due_date} , #{status})-->
+	
+ INSERT INTO board_list 
+             ( mem_no ,B_NO, B_id,B_TITLE,B_CONTENT,DUE_DATE,STATUS,B_TYPE ,USE_FLAG)VALUES ( #{mem_no} ,board_idx.nextval, #{b_id}, #{b_title}, #{b_content}, #{due_date}, #{status},'일일업무','Y')
+		
 	</insert>
 	
 	
@@ -56,12 +107,13 @@
 						ON  A.userid = B.userid
 					   WHERE title = #{title} -->
 					   
-			SELECT  B.B_NO, A.MEM_ID , B.B_TITLE , B.B_CONTENT ,  TO_CHAR(B.INSERT_DATE,'YYYY-MM-DD') AS INSERT_DATE , TO_CHAR(B.DUE_DATE,'YYYY-MM-DD') AS DUE_DATE
-			,B.STATUS
-		         FROM  MEMBER_ACCOUNT A
-				LEFT JOIN BOARD_LIST B
-				ON  A.MEM_ID = B.B_ID
-				WHERE B_NO = #{b_no}  
+		
+					   SELECT 
+					    A.MEM_NO, B.B_ROW , A.MEM_ID , B.B_TITLE, B.B_CONTENT,  B.B_ID ,  B.B_NO , b.status , b.insert_date, b.due_date , b.use_flag
+						FROM  MEMBER_ACCOUNT A
+						LEFT JOIN (SELECT ROWNUM AS b_row , mem_no ,b_title , b_id ,b_content ,b_no , status, TO_CHAR(insertdate,'YYYY-MM-DD') AS INSERT_DATE, TO_CHAR(DUE_DATE,'YYYY-MM-DD') AS DUE_DATE ,USE_FLAG FROM board_list WHERE MEM_NO = '1') B
+						ON A.MEM_ID = B.B_ID 
+						where A.MEM_ID = #{mem_id} AND b.b_row = #{b_row} 
 					  
 					  
 					  
@@ -100,11 +152,11 @@
 		<select id="adminDetail" parameterType="MemberVO" resultType="HashMap">
 		    
 		 	
-		        SELECT B.B_NO , A.MEM_ID, A.loginlevel, B.B_ID, B.B_TITLE, B.B_CONTENT , TO_CHAR(B.INSERT_DATE , 'YYYY-MM-DD') AS INSERT_DATE, TO_CHAR(B.DUE_DATE, 'YYYY-MM-DD') AS DUE_DATE   
-		        FROM MEMBER_ACCOUNT A 
-		        LEFT JOIN B.BOARD_LIST 
-		        ON A.MEM_ID = B.B_ID 
-		        WHERE A.loginlevel = '2' AND B.B_TITLE IS NOT NULL
+		        SELECT B.B_NO , A.MEM_ID, A.loginlevel, B.B_ID, B.STATUS, B.B_TITLE, B.B_CONTENT , TO_CHAR(B.INSERT_DATE , 'YYYY-MM-DD') AS INSERT_DATE, TO_CHAR(B.DUE_DATE, 'YYYY-MM-DD') AS DUE_DATE
+				FROM 
+				MEMBER_ACCOUNT a 
+				LEFT JOIN BOARD_LIST b 
+				on a.MEM_ID  = b.B_ID WHERE LOGINLEVEL ='2' AND b.B_TITLE IS NOT null
  		        
 	</select>
 	

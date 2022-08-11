@@ -14,6 +14,9 @@ public interface BoardService {
 	
 	public List<HashMap<String,Object>> selectListAll(MemberVO memberVO) throws Exception;
 	
+	public List<HashMap<String,Object>> adminNotice(MemberVO memberVO) throws Exception;
+	
+	int NoticeDelete(BoardVO BoardVO) throws Exception;
 
 	int boardInsert(BoardVO boardVO) throws Exception;
 	

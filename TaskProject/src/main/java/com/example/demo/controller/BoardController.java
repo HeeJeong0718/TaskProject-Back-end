@@ -44,6 +44,43 @@ public class BoardController {
 		return new ResponseEntity<String>(jsonStr,resHeader, HttpStatus.CREATED);
 	}
 	
+	@RequestMapping(value = "/adminNotice")
+	public ResponseEntity<String> adminNotice(ModelMap model,@RequestBody  MemberVO  memberVO , HttpServletRequest request, HttpServletResponse response, HttpSession session) throws Exception {
+		
+		String jsonStr = "";
+		HttpHeaders resHeader = new HttpHeaders();
+		List<HashMap<String,Object>> resultList = boardService.adminNotice(memberVO);
+
+
+		jsonStr = StringUtil.jsonStrSearch(resultList);
+		resHeader.add("Content-Type", "application/json");		
+		return new ResponseEntity<String>(jsonStr,resHeader, HttpStatus.CREATED);
+	}
+	
+	@RequestMapping(value = "/NoticeDelete")
+	@ResponseBody //@requestbody 꼭넣어주자
+	public ResponseEntity<String> NoticeDelete(String httpParam, HttpServletRequest request, HttpServletResponse response, ModelMap model, @RequestBody BoardVO  boardVO) throws Exception{
+		String jsonStr = "";
+		HttpHeaders resHeader = new HttpHeaders();
+		
+		try {
+			int updateYn = 0;
+			updateYn += boardService.NoticeDelete(boardVO);	
+		
+			System.out.println("updateYn" + updateYn);
+			if(updateYn > 0) {
+				jsonStr = StringUtil.jsonSimpleReturn("000");
+				System.out.println("str" + jsonStr); 
+			}else { 
+				jsonStr = StringUtil.jsonSimpleReturn("997");
+			}
+		}catch(Exception e){
+			jsonStr = StringUtil.jsonSimpleReturn("999");
+		}
+		
+		resHeader.add("Content-Type", "application/json;charset=UTF-8");
+		return new ResponseEntity<String>(jsonStr, resHeader, HttpStatus.CREATED);
+	}
 	
 		
 		

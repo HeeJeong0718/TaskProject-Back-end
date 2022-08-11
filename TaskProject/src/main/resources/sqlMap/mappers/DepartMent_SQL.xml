@@ -17,6 +17,15 @@
 		
 	
 	</select>
+	
+	<select id="depDetail" parameterType="DepartMentVO" resultType="HashMap">
+	
+	   select dep_no , dep_id , dep_nm , TO_CHAR(INSERT_DATE,'YYYY-MM-DD') AS INSERT_DATE ,TO_CHAR(UPDATE_DATE,'YYYY-MM-DD') AS UPDATE_DATE
+		   
+	   from department where dep_no = #{dep_no} 
+		    
+	
+	</select>
  
 	<insert id="depInsert" parameterType="DepartMentVO">
 	     /*insertTest*/
@@ -33,6 +42,8 @@
 			      
 			      
 	</update>
+	
+	
 	
 	
 

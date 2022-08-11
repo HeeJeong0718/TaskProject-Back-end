@@ -29,6 +29,18 @@ public class BoardServiceImpl implements BoardService {
 		return boardMapper.selectListAll(memberVO);
 	}
 	
+	
+	@Override
+	public List<HashMap<String, Object>> adminNotice(MemberVO memberVO) throws Exception {
+		return boardMapper.adminNotice(memberVO);
+	}
+	
+
+	@Override
+	public int NoticeDelete(BoardVO boardVO)   throws Exception {
+		return boardMapper.NoticeDelete(boardVO);
+	}
+	
 
 	@Override
 	public int boardInsert(BoardVO boardVO)   throws Exception {

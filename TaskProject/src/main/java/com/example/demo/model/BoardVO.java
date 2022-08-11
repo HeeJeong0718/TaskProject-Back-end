@@ -18,5 +18,10 @@ public class BoardVO {
 	private String b_type="";
 	private String start_date="";
 	private String end_date="";
+	private String b_row="";
+	private String mem_id="";
+	private String mem_no="";
+	private String use_flag="";
+	
 
 }

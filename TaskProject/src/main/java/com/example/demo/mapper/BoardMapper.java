@@ -19,6 +19,9 @@ public interface BoardMapper {
 	//로그인한 아이디의 리스트
 	List<HashMap<String, Object>>  selectListAll(MemberVO memberVO)throws Exception, SQLException;
 	
+	List<HashMap<String, Object>>  adminNotice(MemberVO memberVO)throws Exception, SQLException;
+	
+	int NoticeDelete (BoardVO boardVO)throws Exception, SQLException;
 	
 	int boardInsert (BoardVO boardVO)throws Exception, SQLException;
 	
