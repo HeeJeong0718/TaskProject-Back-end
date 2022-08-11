@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+
+
+<mapper namespace="com.example.demo.mapper.UserMapper">
+
+		<select id="selectMyPage" parameterType="MemberVO" resultType="HashMap">
+		     
+            SELECT 
+				    A.MEM_ID, A.MEM_PWD  , A.MEM_NM , A.MEM_DP_ID, A.MEM_DP_NM 
+				FROM MEMBER_ACCOUNT A
+				LEFT JOIN DEPARTMENT B ON A.MEM_ID = B.USERID
+				WHERE A.MEM_ID = #{mem_id}
+
+	</select>
+ 
+		<update id="updateMyPage" parameterType="MemberVO">
+		   
+		    UPDATE 
+		      MEMBER_ACCOUNT
+		       SET
+		         mem_id = #{mem_id},
+		         mem_pwd = #{mem_pwd},
+		         mem_nm = #{mem_nm},
+		         mem_dp_id = #{mem_dp_id},
+		         mem_dp_nm = #{mem_dp_nm} 
+		        
+		      where mem_id = #{mem_id}
+				
+		      
+	</update>
+	
+	
+</mapper>
