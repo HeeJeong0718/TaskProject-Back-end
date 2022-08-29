@@ -32,5 +32,8 @@
 <p>
 <img src="https://user-images.githubusercontent.com/104083733/187227014-8cdee0be-e699-4229-84c6-b6ba41cbe4c6.gif">
 </p>
-
+### 관리자
+<p>
+<img src="https://user-images.githubusercontent.com/104083733/187227830-5d700ac3-5d9e-4ac5-ae86-4699f32864bc.gif">
+</p>
 
