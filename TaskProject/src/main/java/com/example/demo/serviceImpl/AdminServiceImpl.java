@@ -24,11 +24,31 @@ public class AdminServiceImpl implements AdminService {
 	private AdminMapper adminMapper;
     
 
+
 	
 	@Override
-	public List<HashMap<String, Object>> selectDepartMent(DepartMentVO  departmentVO) throws Exception {
-		return adminMapper.selectDepartMent(departmentVO);
+	public List<HashMap<String, Object>> selectUserAll(MemberVO memberVO) throws Exception {
+		return adminMapper.selectUserAll(memberVO);
 	}
+	
+
+	@Override
+	public List<HashMap<String, Object>> adminNotice(MemberVO memberVO) throws Exception {
+		return adminMapper.adminNotice(memberVO);
+	}
+	
+	
+	
+	@Override
+	public List<HashMap<String, Object>> adminDetail(MemberVO memberVO) throws Exception {
+		return adminMapper.adminDetail(memberVO);
+	}
+	
+	@Override
+	public HashMap<String, Object> adminDetail2 (BoardVO  boardVO)   throws Exception {
+		return adminMapper.adminDetail2(boardVO);
+	}
+
 	
 }
 	  

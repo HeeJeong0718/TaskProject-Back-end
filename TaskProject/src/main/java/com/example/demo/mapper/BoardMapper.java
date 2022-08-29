@@ -18,6 +18,7 @@ public interface BoardMapper {
 
 	//로그인한 아이디의 리스트
 	List<HashMap<String, Object>>  selectListAll(MemberVO memberVO)throws Exception, SQLException;
+	List<HashMap<String, Object>>  selectUserAll(MemberVO memberVO)throws Exception, SQLException;
 	
 	List<HashMap<String, Object>>  adminNotice(MemberVO memberVO)throws Exception, SQLException;
 	
@@ -27,13 +28,17 @@ public interface BoardMapper {
 	
 	int boardDelete (BoardVO boardVO)throws Exception, SQLException;
 	
-	int boardUpdate (BoardVO boardVO)throws Exception, SQLException;
+	//int boardUpdate (BoardVO boardVO)throws Exception, SQLException;
+
+	HashMap<String, Object> boardUpdate (BoardVO boardVO)throws Exception, SQLException;
 
 	 
 	HashMap<String, Object> boardDetail (BoardVO boardVO)throws Exception, SQLException;
 	
+	HashMap<String, Object> boardCount (BoardVO boardVO)throws Exception, SQLException;
+	
 	List<HashMap<String, Object>>  selectSearch(BoardVO boardVO)throws Exception, SQLException;
 	
-	List<HashMap<String, Object>>  adminDetail(MemberVO memberVO )throws Exception, SQLException;
+	//List<HashMap<String, Object>>  adminDetail(MemberVO memberVO )throws Exception, SQLException;
 	
 }

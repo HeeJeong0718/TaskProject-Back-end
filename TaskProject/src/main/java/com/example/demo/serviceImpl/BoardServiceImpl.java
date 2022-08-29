@@ -29,6 +29,13 @@ public class BoardServiceImpl implements BoardService {
 		return boardMapper.selectListAll(memberVO);
 	}
 	
+
+	@Override
+	public List<HashMap<String, Object>> selectUserAll(MemberVO memberVO) throws Exception {
+		return boardMapper.selectUserAll(memberVO);
+	}
+	
+	
 	
 	@Override
 	public List<HashMap<String, Object>> adminNotice(MemberVO memberVO) throws Exception {
@@ -54,15 +61,28 @@ public class BoardServiceImpl implements BoardService {
 		return boardMapper.boardDelete(boardVO);
 	}
 	
-	@Override
+	/*@Override
 	public int boardUpdate(BoardVO boardVO)   throws Exception {
 		return boardMapper.boardUpdate(boardVO);
+	}*/
+	
+
+	@Override
+	public HashMap<String, Object> boardUpdate ( BoardVO  boardVO)   throws Exception {
+		return boardMapper.boardUpdate(boardVO);
 	}
+
 	
 
 	@Override
 	public HashMap<String, Object> boardDetail ( BoardVO  boardVO)   throws Exception {
 		return boardMapper.boardDetail(boardVO);
+	}
+
+	
+	@Override
+	public HashMap<String, Object> boardCount ( BoardVO  boardVO)   throws Exception {
+		return boardMapper.boardCount(boardVO);
 	}
 
 
@@ -73,10 +93,10 @@ public class BoardServiceImpl implements BoardService {
 	
 	
 	
-	@Override
-	public List<HashMap<String, Object>> adminDetail(MemberVO memberVO) throws Exception {
-		return boardMapper.adminDetail(memberVO);
-	}
+	/*
+	 * @Override public List<HashMap<String, Object>> adminDetail(MemberVO memberVO)
+	 * throws Exception { return boardMapper.adminDetail(memberVO); }
+	 */
 }
 	  
 	  

@@ -13,6 +13,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -22,6 +26,8 @@ import com.example.demo.Util.StringUtil;
 import com.example.demo.model.BoardVO;
 import com.example.demo.model.MemberVO;
 import com.example.demo.service.BoardService;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @CrossOrigin(origins="*") 
 @RestController
@@ -31,8 +37,12 @@ public class BoardController {
 	private BoardService boardService;
 	
 	
-	@RequestMapping(value = "/taskall")
-	public ResponseEntity<String> mainListAll(ModelMap model,@RequestBody  MemberVO  memberVO , HttpServletRequest request, HttpServletResponse response, HttpSession session) throws Exception {
+	/*리스트 전체조회
+	 * @param mem_no,
+	 * @param mem_id
+	 */
+	@GetMapping(value = "/taskall")
+	public ResponseEntity<String> mainListAll(ModelMap model,  MemberVO  memberVO , HttpServletRequest request, HttpServletResponse response, HttpSession session) throws Exception {
 		
 		String jsonStr = "";
 		HttpHeaders resHeader = new HttpHeaders();
@@ -44,21 +54,13 @@ public class BoardController {
 		return new ResponseEntity<String>(jsonStr,resHeader, HttpStatus.CREATED);
 	}
 	
-	@RequestMapping(value = "/adminNotice")
-	public ResponseEntity<String> adminNotice(ModelMap model,@RequestBody  MemberVO  memberVO , HttpServletRequest request, HttpServletResponse response, HttpSession session) throws Exception {
-		
-		String jsonStr = "";
-		HttpHeaders resHeader = new HttpHeaders();
-		List<HashMap<String,Object>> resultList = boardService.adminNotice(memberVO);
-
-
-		jsonStr = StringUtil.jsonStrSearch(resultList);
-		resHeader.add("Content-Type", "application/json");		
-		return new ResponseEntity<String>(jsonStr,resHeader, HttpStatus.CREATED);
-	}
-	
-	@RequestMapping(value = "/NoticeDelete")
-	@ResponseBody //@requestbody 꼭넣어주자
+    /* 관리자 알림 리스트삭제
+     * @param b_no
+     * @param use_flag ='N'
+     * */	
+	//@RequestMapping(value = "/NoticeDelete")
+	@PutMapping(value = "/NoticeDelete")
+	//@ResponseBody //@requestbody 꼭넣어주자
 	public ResponseEntity<String> NoticeDelete(String httpParam, HttpServletRequest request, HttpServletResponse response, ModelMap model, @RequestBody BoardVO  boardVO) throws Exception{
 		String jsonStr = "";
 		HttpHeaders resHeader = new HttpHeaders();
@@ -84,7 +86,7 @@ public class BoardController {
 	
 		
 		
-		@RequestMapping(value = "/boardInsert")
+		@PostMapping(value = "/boardInsert")
 		@ResponseBody //@requestbody 꼭넣어주자
 		public ResponseEntity<String> maininsert(String httpParam, HttpServletRequest request, HttpServletResponse response, ModelMap model, @RequestBody BoardVO  boardVO) throws Exception{
 			String jsonStr = "";
@@ -112,13 +114,24 @@ public class BoardController {
 	   
 
 		
-		@RequestMapping(value = "/boardUpdate")
-		@ResponseBody //@requestbody 꼭넣어주자
+		@PutMapping(value = "/boardUpdate")
+		//@ResponseBody //@requestbody 꼭넣어주자
 		public ResponseEntity<String> mainupdate(String httpParam, HttpServletRequest request, HttpServletResponse response, ModelMap model, @RequestBody BoardVO  boardVO) throws Exception{
 			String jsonStr = "";
 			HttpHeaders resHeader = new HttpHeaders();
 			
 			try {
+				HashMap<String , Object> boardUpdate =  boardService.boardUpdate(boardVO);	
+				
+				jsonStr = StringUtil.jsonStrOneSearch(boardUpdate);
+				System.out.println("jsonStr" + jsonStr);
+			}catch(Exception e){
+				jsonStr = StringUtil.jsonSimpleReturn("999");
+			}
+			resHeader.add("Content-Type", "application/json;charset=UTF-8");
+			return new ResponseEntity<String>(jsonStr, resHeader, HttpStatus.CREATED);
+			
+			/*try {
 				int updateYn = 0;
 				updateYn += boardService.boardUpdate(boardVO);	
 			
@@ -131,16 +144,17 @@ public class BoardController {
 				}
 			}catch(Exception e){
 				jsonStr = StringUtil.jsonSimpleReturn("999");
-			}
+			}*/
 			
-			resHeader.add("Content-Type", "application/json;charset=UTF-8");
-			return new ResponseEntity<String>(jsonStr, resHeader, HttpStatus.CREATED);
+			
 		}
 		
-
-		@RequestMapping(value = "/boardDelete")
+		 
+		@DeleteMapping(value = "/boardDelete/{b_no}")
 		@ResponseBody //@requestbody 꼭넣어주자
-		public ResponseEntity<String> maindelete(String httpParam, HttpServletRequest request, HttpServletResponse response, ModelMap model, @RequestBody BoardVO  boardVO) throws Exception{
+		@JsonProperty("boardVO")
+		@CrossOrigin(origins="*")
+		public ResponseEntity<String> maindelete(String httpParam, HttpServletRequest request, HttpServletResponse response, ModelMap model,  BoardVO  boardVO) throws Exception{
 			String jsonStr = "";
 			HttpHeaders resHeader = new HttpHeaders();
 			
@@ -165,9 +179,8 @@ public class BoardController {
 		
 
 		 @CrossOrigin(origins="*")
-		@RequestMapping(value = "/boardDetail")
-		@ResponseBody
-		public ResponseEntity<String> menuDetail(String httpParam, HttpServletRequest request, HttpServletResponse response, ModelMap model , @RequestBody BoardVO  boardVO) throws Exception{
+		 @GetMapping(value = "/boardDetail")
+		public ResponseEntity<String> menuDetail(String httpParam, HttpServletRequest request, HttpServletResponse response, ModelMap model ,  BoardVO  boardVO) throws Exception{
 			String jsonStr = "";
 			HttpHeaders resHeader = new HttpHeaders();
 			try {
@@ -182,38 +195,40 @@ public class BoardController {
 			return new ResponseEntity<String>(jsonStr, resHeader, HttpStatus.CREATED);
 		}
 		 
-		 
-			@RequestMapping(value = "/boardSearch")
-			public ResponseEntity<String> mainsearch(ModelMap model,@RequestBody  BoardVO  boardVO , HttpServletRequest request, HttpServletResponse response, HttpSession session) throws Exception {
-				
-				String jsonStr = "";
-				HttpHeaders resHeader = new HttpHeaders();
-				List<HashMap<String,Object>> resultList = boardService.selectSearch(boardVO);
 
-
-				jsonStr = StringUtil.jsonStrSearch(resultList);
-				resHeader.add("Content-Type", "application/json");		
-				return new ResponseEntity<String>(jsonStr,resHeader, HttpStatus.CREATED);
-			}
-			
-		 
-		 
-		 
-		 	
 		 @CrossOrigin(origins="*")
-			@RequestMapping(value = "/adminDetail")
-			@ResponseBody
-			public ResponseEntity<String> adminDetail(String httpParam, HttpServletRequest request, HttpServletResponse response, ModelMap model , @RequestBody MemberVO  memberVO) throws Exception{
-				String jsonStr = "";
-				HttpHeaders resHeader = new HttpHeaders();
-				HttpSession session = request.getSession();
+		@RequestMapping(value = "/boardCount")
+		@ResponseBody
+		public ResponseEntity<String> boardCount(String httpParam, HttpServletRequest request, HttpServletResponse response, ModelMap model , @RequestBody BoardVO  boardVO) throws Exception{
+			String jsonStr = "";
+			HttpHeaders resHeader = new HttpHeaders();
+			try {
+				HashMap<String , Object> boardCount = boardService.boardCount(boardVO);
 				
-				List<HashMap<String,Object>> adminDetail = boardService.adminDetail(memberVO);
-
-				jsonStr = StringUtil.jsonStrSearch(adminDetail);
-				resHeader.add("Content-Type", "application/json");		
-				return new ResponseEntity<String>(jsonStr,resHeader, HttpStatus.CREATED);
+				jsonStr = StringUtil.jsonStrOneSearch(boardCount);
+				System.out.println("jsonStr" + jsonStr);
+			}catch(Exception e){
+				jsonStr = StringUtil.jsonSimpleReturn("999");
+			}
+			resHeader.add("Content-Type", "application/json;charset=UTF-8");
+			return new ResponseEntity<String>(jsonStr, resHeader, HttpStatus.CREATED);
+		}
+		 
+		 
+		 
+		 
+		@RequestMapping(value = "/boardSearch")
+		public ResponseEntity<String> mainsearch(ModelMap model,@RequestBody  BoardVO  boardVO , HttpServletRequest request, HttpServletResponse response, HttpSession session) throws Exception {
 			
-			}	 
+			String jsonStr = "";
+			HttpHeaders resHeader = new HttpHeaders();
+			List<HashMap<String,Object>> resultList = boardService.selectSearch(boardVO);
+
+
+			jsonStr = StringUtil.jsonStrSearch(resultList);
+			resHeader.add("Content-Type", "application/json");		
+			return new ResponseEntity<String>(jsonStr,resHeader, HttpStatus.CREATED);
+		}
+
 		 
 }

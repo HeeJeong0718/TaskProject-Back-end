@@ -6,17 +6,14 @@
 
 <mapper namespace="com.example.demo.mapper.DepartMentMapper">
 
-		<select id="selectListAll" parameterType="DepartMentVO" resultType="HashMap">
-		
-		   select dep_no , dep_id , dep_nm , insert_date , update_date
+		<select id="selectDepartMent" parameterType="DepartMentVO" resultType="HashMap">
+		       
+		   select dep_no , dep_id , dep_nm , TO_CHAR(INSERT_date,'YYYY-MM-DD') AS INSERT_DATE , update_date
 		   
 		   from department 
 		   
-		   
-		    
-		
-	
 	</select>
+ 
 	
 	<select id="depDetail" parameterType="DepartMentVO" resultType="HashMap">
 	

@@ -13,9 +13,8 @@ import com.example.demo.model.MemberVO;
 @Service
 public interface DepartmentService {
 	
-	public List<HashMap<String,Object>> selectListAll(DepartMentVO  depVO) throws Exception;
+	public List<HashMap<String,Object>> selectDepartMent(DepartMentVO  departmentVO) throws Exception;
 	
-
 	int depInsert(DepartMentVO  depVO) throws Exception;
 	
 	int depDelete(DepartMentVO  depVO) throws Exception;

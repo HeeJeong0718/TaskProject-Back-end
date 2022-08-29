@@ -18,7 +18,7 @@ import com.example.demo.model.TestVO;
 public interface DepartMentMapper {
 
 	//로그인한 아이디의 리스트
-	List<HashMap<String, Object>>  selectListAll(DepartMentVO  depVO)throws Exception, SQLException;
+	List<HashMap<String, Object>>  selectDepartMent(DepartMentVO  departmentVO)throws Exception, SQLException;
 	
 	
 	int depInsert (DepartMentVO  depVO)throws Exception, SQLException;

@@ -5,7 +5,9 @@
 
 
 <mapper namespace="com.example.demo.mapper.BoardMapper">
-
+        
+        
+        <!--유저 리스트 전체조회 -->
 		<select id="selectListAll" parameterType="MemberVO" resultType="HashMap">
 		        <!-- 	SELECT 
 						A.MEM_ID , B_NO , B.B_TITLE , B_CONTENT ,TO_CHAR(B.INSERT_date,'YYYY-MM-DD') AS INSERT_DATE , TO_CHAR(B.DUE_DATE,'YYYY-MM-DD') AS DUE_DATE
@@ -34,7 +36,7 @@
 					    A.MEM_NO, A.MEM_ID , B.B_TITLE, B.B_CONTENT,  B.B_ID ,  B.B_NO , b.status , b.insert_date, b.due_date , b.use_flag
 						FROM  MEMBER_ACCOUNT A
 						LEFT JOIN (SELECT  mem_no ,b_title , b_id ,b_content ,b_no , status, TO_CHAR(insertdate,'YYYY-MM-DD') AS INSERT_DATE,
-						TO_CHAR(DUE_DATE,'YYYY-MM-DD') AS DUE_DATE ,USE_FLAG FROM board_list WHERE MEM_NO = #{mem_no}  ORDER BY due_date asc) B
+						TO_CHAR(DUE_DATE,'YYYY-MM-DD') AS DUE_DATE ,USE_FLAG FROM board_list WHERE MEM_NO = #{mem_no} ) B
 						ON A.MEM_ID = B.B_ID 
 						where A.MEM_ID = #{mem_id} and B.B_TITLE is not NULL
 
@@ -48,17 +50,40 @@
 	</select>
 	
 	
+		<select id="selectUserAll" parameterType="BoardVO" resultType="HashMap">
+		       SELECT a.b_id ,
+			           COUNT(CASE WHEN STATUS ='ongoing' THEN 1 END) AS ongoing,
+			           COUNT(CASE WHEN STATUS ='processing' THEN 1 END) AS processing,
+			           COUNT(CASE WHEN STATUS ='done' THEN 1 END) AS done,
+			           count(*) AS board_all
+			           FROM BOARD_LIST a
+			          LEFT JOIN MEMBER_ACCOUNT b ON a.b_id = b.MEM_ID 
+			          WHERE loginlevel ='2'
+			           GROUP BY b_id
+                      
+              
+ 
+	</select>
+	
+	
 		<select id="adminNotice" parameterType="MemberVO" resultType="HashMap">
 		      
-		     <!--  SELECT B_NO, B_ID, B_TITLE ,B_CONTENT , TO_CHAR(INSERT_DATE, 'YYYY-MM-DD') AS INSERT_DATE , TO_CHAR(DUE_DATE,'YYYY-MM-DD') AS DUE_DATE  FROM BOARD_LIST WHERE b_id ='admin' -->
-
-	           SELECT * FROM board_list WHERE b_id ='admin' 
+      		    SELECT  rownum AS b_row,
+					    A.MEM_NO, A.MEM_ID , B.B_TITLE, B.B_CONTENT,  B.B_ID ,  B.B_NO , b.status , b.insert_date, b.due_date , b.use_flag
+						FROM  MEMBER_ACCOUNT A
+						LEFT JOIN (SELECT  mem_no ,b_title , b_id ,b_content ,b_no , status, TO_CHAR(insertdate,'YYYY-MM-DD') AS INSERT_DATE,
+						TO_CHAR(DUE_DATE,'YYYY-MM-DD') AS DUE_DATE ,USE_FLAG FROM board_list WHERE MEM_NO = '2'  ORDER BY due_date asc) B
+						ON A.MEM_ID = B.B_ID 
+						where A.MEM_ID = 'admin'
+ 
+              
+ 
 	</select>
 	
 	<update id="NoticeDelete" parameterType="BoardVO">
    	
    	  
-   	 	UPDATE BOARD_LIST SET use_flag = 'N' where b_no = '1' AND b_id ='admin'
+   	 	UPDATE BOARD_LIST SET use_flag = 'N' where b_no = #{b_no} AND b_id ='admin'
  
    	  
    	  </update>
@@ -77,12 +102,18 @@
 	</insert>
 	
 	
-		<update id="boardUpdate" parameterType="MemberVO">
+		<update id="boardUpdate" parameterType="BoardVO">
 		/* updateTest  */
 			     
-			      UPDATE BOARD_LIST SET b_title = #{b_title}, b_content = #{b_content}, due_date = #{due_date} ,status = #{status} where b_no = #{b_no}
+			    <!--   UPDATE BOARD_LIST SET b_title = #{b_title}, b_content = #{b_content}, due_date = #{due_date} ,status = #{status} where b_no = #{b_no}-->
 			      
-			      
+			     MERGE INTO BOARD_LIST
+					  USING DUAL ON (b_no =#{b_no})
+					  WHEN MATCHED THEN
+					  	UPDATE SET b_title = #{b_title} , b_content = #{b_content} , status = #{status}
+					  WHEN NOT MATCHED THEN
+					  	INSERT (BOARD_LIST.b_title, BOARD_LIST.b_content , BOARD_LIST.status)
+					  	VALUES (#{b_title}, #{b_content} , #{status})    
 	</update>
 	
 	
@@ -90,7 +121,7 @@
    	<delete id="boardDelete" parameterType="BoardVO">
    	
    	  
-   	  delete from BOARD_LIST WHERE b_no = #{b_no}
+   	  delete from BOARD_LIST WHERE b_no =#{b_no} 
    	  </delete>
  
 	 	<!--VO에는 name 이라고 되어있어서 찾을때는 {name} 이라고 해야한다!!! -->
@@ -107,15 +138,13 @@
 						ON  A.userid = B.userid
 					   WHERE title = #{title} -->
 					   
-		
-					   SELECT 
+		      SELECT 
 					    A.MEM_NO, B.B_ROW , A.MEM_ID , B.B_TITLE, B.B_CONTENT,  B.B_ID ,  B.B_NO , b.status , b.insert_date, b.due_date , b.use_flag
 						FROM  MEMBER_ACCOUNT A
-						LEFT JOIN (SELECT ROWNUM AS b_row , mem_no ,b_title , b_id ,b_content ,b_no , status, TO_CHAR(insertdate,'YYYY-MM-DD') AS INSERT_DATE, TO_CHAR(DUE_DATE,'YYYY-MM-DD') AS DUE_DATE ,USE_FLAG FROM board_list WHERE MEM_NO = '1') B
+						LEFT JOIN (SELECT ROWNUM AS b_row , mem_no ,b_title , b_id ,b_content ,b_no , status, TO_CHAR(insertdate,'YYYY-MM-DD') AS INSERT_DATE, TO_CHAR(DUE_DATE,'YYYY-MM-DD') AS DUE_DATE ,USE_FLAG FROM board_list WHERE MEM_NO =#{mem_no}) B
 						ON A.MEM_ID = B.B_ID 
-						where A.MEM_ID = #{mem_id} AND b.b_row = #{b_row} 
-					  
-					  
+					   where A.MEM_ID = #{mem_id} AND b.b_row = #{b_row} 
+					
 					  
 		      
 	</select>
@@ -131,16 +160,17 @@
 						where A.MEM_ID = #{mem_id} and B.B_TITLE is not null
 						ORDER BY TO_NUMBER(B_NO) -->
 						
-			    SELECT 
-						A.MEM_ID , B_NO , B.B_TITLE , B_CONTENT ,TO_CHAR(B.INSERT_date,'YYYY-MM-DD') AS INSERT_DATE , TO_CHAR(B.DUE_DATE,'YYYY-MM-DD') AS DUE_DATE 
+			 
+				
+						 SELECT  rownum AS b_row,
+					    A.MEM_NO, A.MEM_ID , B.B_TITLE, B.B_CONTENT,  B.B_ID ,  B.B_NO , b.status , b.insert_date, b.due_date , b.use_flag
 						FROM  MEMBER_ACCOUNT A
-						LEFT JOIN BOARD_LIST B
+						LEFT JOIN (SELECT  mem_no ,b_title , b_id ,b_content ,b_no , status, TO_CHAR(insertdate,'YYYY-MM-DD') AS INSERT_DATE,
+						TO_CHAR(DUE_DATE,'YYYY-MM-DD') AS DUE_DATE ,USE_FLAG FROM board_list WHERE MEM_NO = #{mem_no} ) B
 						ON A.MEM_ID = B.B_ID 
-						 WHERE
-						  TO_CHAR(B.DUE_DATE,'YYYY-MM-DD') BETWEEN  #{start_date} AND #{end_date}
-						 AND A.MEM_ID = 'AA'
-	                      				
-					 
+						where A.MEM_ID = #{mem_id} and B.B_TITLE is not NULL AND due_date BETWEEN #{start_date} AND #{end_date}
+
+
 
 	</select>
 	
@@ -149,16 +179,29 @@
 	
 	
 	
-		<select id="adminDetail" parameterType="MemberVO" resultType="HashMap">
+	<!-- 	<select id="adminDetail" parameterType="MemberVO" resultType="HashMap">
 		    
 		 	
-		        SELECT B.B_NO , A.MEM_ID, A.loginlevel, B.B_ID, B.STATUS, B.B_TITLE, B.B_CONTENT , TO_CHAR(B.INSERT_DATE , 'YYYY-MM-DD') AS INSERT_DATE, TO_CHAR(B.DUE_DATE, 'YYYY-MM-DD') AS DUE_DATE
+		        SELECT B.B_NO , A.MEM_ID, A.loginlevel, B.B_ID, B.STATUS, B.B_TITLE, B.B_CONTENT , TO_CHAR(B.INSERTDATE , 'YYYY-MM-DD') AS INSERT_DATE, TO_CHAR(B.DUE_DATE, 'YYYY-MM-DD') AS DUE_DATE
 				FROM 
 				MEMBER_ACCOUNT a 
 				LEFT JOIN BOARD_LIST b 
 				on a.MEM_ID  = b.B_ID WHERE LOGINLEVEL ='2' AND b.B_TITLE IS NOT null
  		        
-	</select>
+	</select> -->
+	
+	  <select  id="boardCount" parameterType="BoardVO" resultType="HashMap">
+	     
+			  SELECT a.ongoing, b.done , c.processing , d.board_all
+             FROM
+           ( select count(*) ongoing from board_list  where status   = 'ongoing' AND mem_no = #{mem_no}  ) a
+          ,( select count(*) done from board_list   where status = 'done' AND  mem_no = #{mem_no}   ) b
+          , ( select count(*) processing from board_list   where status = 'processing' AND mem_no = #{mem_no}  ) c
+           ,( select count(*) board_all from board_list  WHERE mem_no = #{mem_no} ) d
+          
+	  
+	  </select>
+	
 	
 	
 </mapper>

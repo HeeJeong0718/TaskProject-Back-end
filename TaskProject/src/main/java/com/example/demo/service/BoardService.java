@@ -13,6 +13,7 @@ import com.example.demo.model.MemberVO;
 public interface BoardService {
 	
 	public List<HashMap<String,Object>> selectListAll(MemberVO memberVO) throws Exception;
+	public List<HashMap<String,Object>> selectUserAll(MemberVO memberVO) throws Exception;
 	
 	public List<HashMap<String,Object>> adminNotice(MemberVO memberVO) throws Exception;
 	
@@ -22,12 +23,16 @@ public interface BoardService {
 	
 	int boardDelete(BoardVO BoardVO) throws Exception;
 	
-	int boardUpdate(BoardVO BoardVO) throws Exception;
+	//int boardUpdate(BoardVO BoardVO) throws Exception;
+	
+	HashMap<String, Object> boardUpdate( BoardVO  boardVO)throws Exception;
 	
 	HashMap<String, Object> boardDetail( BoardVO  boardVO)throws Exception;
 	
+	HashMap<String, Object> boardCount( BoardVO  boardVO)throws Exception;
+	
 	public List<HashMap<String,Object>> selectSearch(BoardVO  boardVO) throws Exception;
 	
-	public List<HashMap<String,Object>> adminDetail(MemberVO memberVO) throws Exception;
+	//public List<HashMap<String,Object>> adminDetail(MemberVO memberVO) throws Exception;
 	
 }

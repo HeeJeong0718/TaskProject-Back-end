@@ -26,8 +26,8 @@ public class DepartmentServiceImpl implements DepartmentService {
 
 	
 	@Override
-	public List<HashMap<String, Object>> selectListAll(DepartMentVO  depVO) throws Exception {
-		return depMapper.selectListAll(depVO);
+	public List<HashMap<String, Object>> selectDepartMent(DepartMentVO  departmentVO) throws Exception {
+		return depMapper.selectDepartMent(departmentVO);
 	}
 	
 
