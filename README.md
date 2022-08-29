@@ -4,9 +4,9 @@
 #### VueJs를 이용한 업무관리 어플리케이션입니다 회원가입을 한 유저는 자신의 부서를 선택하여 입력한 업무들을 상태에 따라 관리하고 관리자(admin)는 유저들의 업무가 어느정도 진행이 되었는지 확인이 가능합니다
 
 ### 기술 스택
-#### Backend: Spring Boot , Java11
-#### FrontEnd: VueJs (Vuetify), Restful api 
-#### DB : Oracle
+#### Backend: Spring Boot , Java11 , Mybatis
+#### FrontEnd: VueJs (Vuetify), Restful api , Frontend Repo경로: https://github.com/HeeJeong0718/TaskProject-Front-end
+#### DB : Oracle 
 
 ### 기능
 1.로그인(Vuex state관리)
