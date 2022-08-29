@@ -5,7 +5,7 @@
 
 ### 기술 스택
 #### Backend: Spring Boot , Java11 , Mybatis
-#### FrontEnd: VueJs (Vuetify), Restful api , Frontend Repo경로: https://github.com/HeeJeong0718/TaskProject-Front-end
+#### FrontEnd: VueJs (Vuetify), Restful api , https://github.com/HeeJeong0718/TaskProject-Front-end
 #### DB : Oracle 
 
 ### 기능
