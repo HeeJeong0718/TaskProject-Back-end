@@ -28,4 +28,9 @@
 ### admin로그인시 전체 게시물 조회 
 ![image](https://user-images.githubusercontent.com/104083733/187217976-718f4750-787a-46a8-ba24-97c2fc0350a9.png)
 
+### 유저
+<p>
+<img src="https://github.com/HeeJeong0718/TaskProject-Back-end/issues/2#issue-1354415866">
+</p>
+
 
