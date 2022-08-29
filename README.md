@@ -30,7 +30,7 @@
 
 ### 유저
 <p>
-<img src="https://github.com/HeeJeong0718/TaskProject-Back-end/issues/2#issue-1354415866">
+<img src="https://user-images.githubusercontent.com/104083733/187227014-8cdee0be-e699-4229-84c6-b6ba41cbe4c6.gif">
 </p>
 
 
